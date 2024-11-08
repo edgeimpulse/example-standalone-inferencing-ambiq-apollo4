@@ -19,13 +19,14 @@
 #include "peripheral/peripheral.h"
 #include "peripheral/usb/ei_usb.h"
 #include "common_events.h"
-#include "edge-impulse-sdk/porting/ei_classifier_porting.h"
 
 #if (configAPPLICATION_ALLOCATED_HEAP == 1)
 size_t ucHeapSize = (NS_MALLOC_HEAP_SIZE_IN_K + 4) * 1024;
 uint8_t ucHeap[(NS_MALLOC_HEAP_SIZE_IN_K + 4) * 1024] __attribute__((aligned(4)));
 #endif
 
+// Includes from ZIP deployment from Edge Impulse platform
+#include "edge-impulse-sdk/porting/ei_classifier_porting.h"
 #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
 #include "model-parameters/model_variables.h"
 
@@ -38,7 +39,6 @@ static void ei_main_task(void *pvParameters);
 EventGroupHandle_t common_event_group;
 
 static const float features[] = {
-    // copy raw features here
 };
 
 static int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
@@ -54,9 +54,11 @@ static int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
  */
 int main(void)
 {
-    peripheral_init();  // init basic peripheral, core etc
+    peripheral_init();     // init basic peripheral, core etc
     ei_usb_init();         // init usb
-        
+
+    ei_printf("Hello World\r\n");
+
     /* create a task to send data via usb */
     if (xTaskCreate(ei_main_task,
         (const char*) "EI Main Thread",
