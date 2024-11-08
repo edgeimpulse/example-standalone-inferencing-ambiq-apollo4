@@ -33,43 +33,45 @@ sources += $(wildcard src/ns-core/$(BOARD)/$(COMPDIR)/*.s)
 # EdgeImpulse Stuff
 
 # Common Code
-# sources += $(wildcard src/ambiq/*.cpp)
+# CMSIS stuff
+sources +=   $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/TransformFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/CommonTables/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/BasicMathFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/ComplexMathFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/FastMathFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/SupportFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/MatrixFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Source/StatisticsFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/ActivationFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/BasicMathFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/ConcatenationFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/ConvolutionFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/FullyConnectedFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/NNSupportFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/PoolingFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/ReshapeFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/SoftmaxFunctions/*.c) \
+			 $(wildcard src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Source/SVDFunctions/*.c) \
 
-# Per-project EI stuff
-sources +=   $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/TransformFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/CommonTables/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/BasicMathFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/ComplexMathFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/FastMathFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/SupportFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/MatrixFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/DSP/Source/StatisticsFunctions/*.c) \
-	         $(wildcard src/tflite-model/*.cpp) \
-			 $(wildcard src/edge-impulse-sdk/dsp/kissfft/*.cpp) \
-			 $(wildcard src/edge-impulse-sdk/dsp/dct/*.cpp) \
-			 $(wildcard src/edge-impulse-sdk/dsp/memory.cpp) \
-			 $(wildcard src/edge-impulse-sdk/porting/ambiq/*.cpp) \
-             $(wildcard src/edge-impulse-sdk/tensorflow/lite/kernels/*.cc) \
-			 $(wildcard src/edge-impulse-sdk/tensorflow/lite/kernels/internal/*.cc) \
-			 $(wildcard src/edge-impulse-sdk/tensorflow/lite/micro/kernels/*.cc) \
-			 $(wildcard src/edge-impulse-sdk/tensorflow/lite/micro/*.cc) \
-			 $(wildcard src/edge-impulse-sdk/tensorflow/lite/micro/memory_planner/*.cc) \
-			 $(wildcard src/edge-impulse-sdk/tensorflow/lite/core/api/*.cc) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/ActivationFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/BasicMathFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/ConcatenationFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/ConvolutionFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/FullyConnectedFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/NNSupportFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/PoolingFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/ReshapeFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/SoftmaxFunctions/*.c) \
-			 $(wildcard src/edge-impulse-sdk/CMSIS/NN/Source/SVDFunctions/*.c)
-			            
-sources += src/edge-impulse-sdk/tensorflow/lite/c/common.c
+# Edge Impulse sources
+sources +=		$(wildcard src/edge-impulse/edge-impulse-sdk/classifier/*.cpp) \
+ 				$(wildcard src/edge-impulse/edge-impulse-sdk/dsp/dct/*.cpp) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/dsp/kissfft//*.cpp) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/dsp/image/*.cpp ) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/dsp/memory.cpp) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/porting/ambiq/*.cpp) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/kernels/*.cc) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/kernels/internal/*.cc) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/micro/kernels/*.cc) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/micro/*.cc) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/micro/memory_planner/*.cc) \
+				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/core/api/*.cc) \
+				$(wildcard src/edge-impulse/tflite-model/*.cpp)
+# sources += src/edge-impulse/edge-impulse-sdk/tensorflow/lite/c/common.c
 
 # peripheral
-sources += $(wildcard src/peripheral/*.c)
+sources += $(wildcard src/peripheral/*.c) \
+		   $(wildcard src/peripheral/usb/*.c)
 
 targets  := $(BINDIR)/$(local_app_name).axf
 targets  += $(BINDIR)/$(local_app_name).bin
@@ -77,35 +79,26 @@ targets  += $(BINDIR)/$(local_app_name).bin
 objects      = $(call source-to-object,$(sources))
 dependencies = $(subst .o,.d,$(objects))
 
+DEFINES += EI_PORTING_AMBIQ=1
 DEFINES += EI_CLASSIFIER_TFLITE_ENABLE_CMSIS_NN=1 # Use CMSIS-NN functions in the SDK
+DEFINES += EI_CLASSIFIER_ALLOCATION_STATIC=1
 DEFINES += __ARM_FEATURE_DSP=1 					  # Enable CMSIS-DSP optimized features
 DEFINES += TF_LITE_DISABLE_X86_NEON=1
-DEFINES += EI_CLASSIFIER_ALLOCATION_STATIC=1
-DEFINES += EI_PORTING_AMBIQ=1
-# DEFINES += EIDSP_SIGNAL_C_FN_POINTER=1
-# DEFINES += EI_C_LINKAGE=1
 DEFINES += STACK_SIZE=4096
-# DEFINES += NS_MALLOC_HEAP_SIZE_IN_K=24
 
-# Experiment for hello_ambiq model (still runs out of heap, it's in infinite alloc loop)
-# DEFINES += STACK_SIZE=8192
-# DEFINES += NS_MALLOC_HEAP_SIZE_IN_K=48
+LOCAL_INCLUDES += src/
+LOCAL_INCLUDES += src/ns-core/
+LOCAL_INCLUDES += src/edge-impulse/
+LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/Core/Include
+LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Include/
+LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Include/
+LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/PrivateInclude/
+LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/classifier/
 
-LOCAL_INCLUDES += src
-LOCAL_INCLUDES += src
-LOCAL_INCLUDES += src/ns-core
-LOCAL_INCLUDES += src/edge-impulse-sdk/CMSIS/Core/Include
-LOCAL_INCLUDES += src/edge-impulse-sdk/CMSIS/NN/Include/
-LOCAL_INCLUDES += src/edge-impulse-sdk/CMSIS/DSP/Include
-LOCAL_INCLUDES += src/edge-impulse-sdk/CMSIS/DSP/PrivateInclude
-
+CFLAGS += -flax-vector-conversions
 CFLAGS     += $(addprefix -D,$(DEFINES))
 CFLAGS     += $(addprefix -I includes/,$(INCLUDES))
 CFLAGS     += $(addprefix -I ,$(LOCAL_INCLUDES))
-
-CCFLAGS += $(addprefix -D,$(DEFINES))
-CCFLAGS += $(addprefix -I includes/,$(INCLUDES))
-CCFLAGS += $(addprefix -I ,$(LOCAL_INCLUDES))
 
 ifeq ($(TOOLCHAIN),arm)
 LINKER_FILE := src/ns-core/$(BOARD)/$(COMPDIR)/linker_script.sct
