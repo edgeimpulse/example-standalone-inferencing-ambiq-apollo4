@@ -11,7 +11,7 @@ endif
 ifeq ($(TOOLCHAIN),arm-none-eabi)
 CC = $(TOOLCHAIN)-gcc$(EXEEXT)
 GCC = $(TOOLCHAIN)-gcc$(EXEEXT)
-CPP = $(TOOLCHAIN)-cpp$(EXEEXT)
+CPP = $(TOOLCHAIN)-g++$(EXEEXT)
 LD = $(TOOLCHAIN)-ld$(EXEEXT)
 CP = $(TOOLCHAIN)-objcopy$(EXEEXT)
 OD = $(TOOLCHAIN)-objdump$(EXEEXT)
@@ -49,24 +49,19 @@ DOX = doxygen$(EXEEXT)
 
 ifeq ($(TOOLCHAIN),arm-none-eabi)
 CFLAGS+= -mthumb -mcpu=$(CPU) -mfpu=$(FPU) -mfloat-abi=$(FABI)
-CFLAGS+= -ffunction-sections -fdata-sections -fomit-frame-pointer -fno-exceptions
-CCFLAGS+= -fno-use-cxa-atexit
+CFLAGS+= -ffunction-sections -fdata-sections -fomit-frame-pointer -fno-exceptions  -Wno-strict-aliasing
+CCFLAGS+= -fno-use-cxa-atexit -std=c++11 -fno-rtti -fno-unwind-tables -flax-vector-conversions -nostartfiles -xc++
 CFLAGS+= -MMD -MP -Wall
-CONLY_FLAGS+= -std=c99
-ifeq ($(GCC13_EXPERIMENTAL),1)
-CFLAGS+= -g -O2 -ffast-math
-else
-CFLAGS+= -g -O3 -ffast-math
-# CFLAGS+= -g -O0 -ffast-math
-endif
-# CFLAGS+= -g -O2 -ffast-math
+CONLY_FLAGS+= -xc -std=c99
+
+CFLAGS+= -g -Ofast
 
 LINKER_FILE := ./neuralspot/ns-core/src/$(BOARD)/gcc/linker_script.ld
 
 LFLAGS = -mthumb -mcpu=$(CPU) -mfpu=$(FPU) -mfloat-abi=$(FABI)
-LFLAGS+= -nostartfiles -static -fno-exceptions
+LFLAGS+= -nostartfiles -static
 LFLAGS+= -Wl,--gc-sections,--entry,Reset_Handler,-Map,$(BINDIR)/output.map
-LFLAGS+= -Wl,--start-group -lm -lc -lgcc -lnosys -Wl,--whole-archive $(override_libraries) -Wl,--no-whole-archive $(libraries) $(lib_prebuilt) -lstdc++ -Wl,--end-group
+LFLAGS+= -Wl,--start-group -lm -lc -lgcc -lstdc++ -lnosys -Wl,--whole-archive $(override_libraries) -Wl,--no-whole-archive $(libraries) $(lib_prebuilt) -Wl,--end-group
 LFLAGS+=
 
 CPFLAGS = -Obinary
@@ -167,10 +162,6 @@ DEFINES+= NS_PROFILER_RPC_EVENTS_MAX=$(TFLM_VALIDATOR_MAX_EVENTS)
 
 ifeq ($(MLDEBUG),1)
 DEFINES+= NS_MLDEBUG
-else
-ifneq ($(MLPROFILE),1)
-DEFINES+= TF_LITE_STRIP_ERROR_STRINGS
-endif
 endif
 
 ifeq ($(AUDIO_DEBUG),1)

@@ -21,14 +21,14 @@ sources += $(wildcard src/ns-core/*.c)
 sources += $(wildcard src/ns-core/*.cc)
 sources += $(wildcard src/ns-core/*.cpp)
 sources += $(wildcard src/ns-core/*.s)
-sources += $(wildcard src/ns-core/$(BOARD)/*.c)
-sources += $(wildcard src/ns-core/$(BOARD)/*.cc)
-sources += $(wildcard src/ns-core/$(BOARD)/*.cpp)
-sources += $(wildcard src/ns-core/$(BOARD)/*.s)
-sources += $(wildcard src/ns-core/$(BOARD)/$(COMPDIR)/*.c)
-sources += $(wildcard src/ns-core/$(BOARD)/$(COMPDIR)/*.cc)
-sources += $(wildcard src/ns-core/$(BOARD)/$(COMPDIR)/*.cpp)
-sources += $(wildcard src/ns-core/$(BOARD)/$(COMPDIR)/*.s)
+sources += $(wildcard src/ns-core/apollo4p/*.c)
+sources += $(wildcard src/ns-core/apollo4p/*.cc)
+sources += $(wildcard src/ns-core/apollo4p/*.cpp)
+sources += $(wildcard src/ns-core/apollo4p/*.s)
+sources += $(wildcard src/ns-core/apollo4p/$(COMPDIR)/*.c)
+sources += $(wildcard src/ns-core/apollo4p/$(COMPDIR)/*.cc)
+sources += $(wildcard src/ns-core/apollo4p/$(COMPDIR)/*.cpp)
+sources += $(wildcard src/ns-core/apollo4p/$(COMPDIR)/*.s)
 
 # EdgeImpulse Stuff
 
@@ -66,12 +66,13 @@ sources +=		$(wildcard src/edge-impulse/edge-impulse-sdk/classifier/*.cpp) \
 				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/micro/*.cc) \
 				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/micro/memory_planner/*.cc) \
 				$(wildcard src/edge-impulse/edge-impulse-sdk/tensorflow/lite/core/api/*.cc) \
-				$(wildcard src/edge-impulse/tflite-model/*.cpp)
-# sources += src/edge-impulse/edge-impulse-sdk/tensorflow/lite/c/common.c
+				$(wildcard src/edge-impulse/tflite-model/*.cpp)		
 
 # peripheral
-sources += $(wildcard src/peripheral/*.c) \
-		   $(wildcard src/peripheral/usb/*.c)
+sources +=	$(wildcard src/peripheral/*.c) \
+			$(wildcard src/peripheral/usb/*.c)
+
+VPATH+=$(dir $(sources))
 
 targets  := $(BINDIR)/$(local_app_name).axf
 targets  += $(BINDIR)/$(local_app_name).bin
@@ -79,27 +80,26 @@ targets  += $(BINDIR)/$(local_app_name).bin
 objects      = $(call source-to-object,$(sources))
 dependencies = $(subst .o,.d,$(objects))
 
-DEFINES += EI_PORTING_AMBIQ=1
-DEFINES += EI_CLASSIFIER_TFLITE_ENABLE_CMSIS_NN=1 # Use CMSIS-NN functions in the SDK
 DEFINES += EI_CLASSIFIER_ALLOCATION_STATIC=1
-DEFINES += __ARM_FEATURE_DSP=1 					  # Enable CMSIS-DSP optimized features
-DEFINES += TF_LITE_DISABLE_X86_NEON=1
-DEFINES += STACK_SIZE=4096
+DEFINES += EI_PORTING_AMBIQ=1				  # Enable CMSIS-DSP optimized features
+DEFINES += HEAP_SIZE=4096
+DEFINES += EI_SENSOR_AQ_STREAM=FILE
+DEFINES += EI_TENSOR_ARENA_LOCATION=".shared"
 
 LOCAL_INCLUDES += src/
 LOCAL_INCLUDES += src/ns-core/
 LOCAL_INCLUDES += src/edge-impulse/
+LOCAL_INCLUDES += src/edge-impulse/model/
 LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/Core/Include
 LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/NN/Include/
 LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/Include/
 LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/CMSIS/DSP/PrivateInclude/
 LOCAL_INCLUDES += src/edge-impulse/edge-impulse-sdk/classifier/
+LOCAL_INCLUDES += src/edge-impulse/ingestion-sdk-c/
 
-CFLAGS += -flax-vector-conversions
 CFLAGS     += $(addprefix -D,$(DEFINES))
 CFLAGS     += $(addprefix -I includes/,$(INCLUDES))
 CFLAGS     += $(addprefix -I ,$(LOCAL_INCLUDES))
-
 ifeq ($(TOOLCHAIN),arm)
 LINKER_FILE := src/ns-core/$(BOARD)/$(COMPDIR)/linker_script.sct
 else ifeq ($(TOOLCHAIN),arm-none-eabi)
@@ -126,17 +126,17 @@ $(BINDIR):
 	$(Q) $(MKD) -p $@
 
 $(BINDIR)/%.o: %.cc
-	@echo " Compiling $(COMPILERNAME) $< to make $@"
+	@echo " Compiling $(CPP) $< to make $@"
 	$(Q) $(MKD) -p $(@D)
-	$(Q) $(CC) -c $(CFLAGS) $(CCFLAGS) $< -o $@
+	$(Q) $(CPP) -c $(CFLAGS) $(CCFLAGS) $< -o $@
 
 $(BINDIR)/%.o: %.cpp
-	@echo " Compiling $(COMPILERNAME) $< to make $@"
+	@echo " Compiling $(CPP) $< to make $@"
 	$(Q) $(MKD) -p $(@D)
-	$(Q) $(CC) -c $(CFLAGS) $(CCFLAGS) $< -o $@
+	$(Q) $(CPP) -c $(CFLAGS) $(CCFLAGS) $< -o $@
 
 $(BINDIR)/%.o: %.c
-	@echo " Compiling $(COMPILERNAME) $< to make $@"
+	@echo " Compiling $(CC) $< to make $@"
 	$(Q) $(MKD) -p $(@D)
 	$(Q) $(CC) -c $(CFLAGS) $(CONLY_FLAGS) $< -o $@
 

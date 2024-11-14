@@ -59,8 +59,6 @@ static int semver_compare(const ns_semver_t *c, const ns_semver_t *n) {
 extern uint32_t ns_core_check_api(
     const ns_core_api_t *submitted, const ns_core_api_t *oldest, const ns_core_api_t *newest) {
 
-    // ns_lp_printf("submitted->apiId: %x\n", submitted->apiId);
-    // ns_lp_printf("newest->apiId: %x\n", newest->apiId);
     if (submitted->apiId != newest->apiId) {
         return NS_STATUS_INVALID_VERSION;
     }

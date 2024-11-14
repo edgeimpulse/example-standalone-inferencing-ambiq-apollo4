@@ -4,7 +4,7 @@
         {
             "name": "Ambiq Apollo4 Debug (Cortex-Debug)",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}/build/apollo4p_blue_kxr_evb/arm-none-eabi/firmware-ambiq-apollo4.axf",
+            "executable": "${workspaceRoot}/build/apollo4p_blue_kxr_evb/arm-none-eabi/example-standalone-inferencing-ambiq-apollo4.axf",        
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",

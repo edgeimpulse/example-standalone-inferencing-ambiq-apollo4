@@ -154,7 +154,7 @@ extern int main(void);
 __attribute__((section(".stack"))) static uint32_t g_pui32Stack[STACK_SIZE];
 
 #ifndef HEAP_SIZE
-    #define HEAP_SIZE 0
+    #define HEAP_SIZE 1024
 #endif
 
 __attribute__((section(".heap"))) __attribute__((__used__)) static uint32_t g_pui32Heap[HEAP_SIZE];
@@ -352,7 +352,7 @@ void Reset_Handler(void) {
           "isb\n");
     #endif
     //
-    // Copy the data segment initializers from flash to SRAM.
+    // Copy the data segment initializers from flash to TCM and SRAM.
     //
     __asm("    ldr     r0, =_init_data\n"
           "    ldr     r1, =_sdata\n"
@@ -362,6 +362,15 @@ void Reset_Handler(void) {
           "        str   r3, [r1], #4\n"
           "        cmp     r1, r2\n"
           "        blt     copy_loop\n");
+
+    __asm("    ldr     r0, =_init_data_sram\n"
+          "    ldr     r1, =_ssdata\n"
+          "    ldr     r2, =_sedata\n"
+          "copy_loop_sram:\n"
+          "        ldr   r3, [r0], #4\n"
+          "        str   r3, [r1], #4\n"
+          "        cmp     r1, r2\n"
+          "        blt     copy_loop_sram\n");
     //
     // Zero fill the bss segment.
     //

@@ -57,8 +57,6 @@ int main(void)
     peripheral_init();     // init basic peripheral, core etc
     ei_usb_init();         // init usb
 
-    ei_printf("Hello World\r\n");
-
     /* create a task to send data via usb */
     if (xTaskCreate(ei_main_task,
         (const char*) "EI Main Thread",
@@ -86,14 +84,13 @@ int main(void)
 static void ei_main_task(void *pvParameters)
 {
     (void)pvParameters;
+    ei_impulse_result_t result = { 0 };
+    ei_printf("Example standalone - Ambiq Apollo 4");
 
     if (sizeof(features) / sizeof(float) != EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE) {
         ei_printf("The size of your 'features' array is not correct. Expected %d items, but had %u\n",
             EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE, sizeof(features) / sizeof(float));
     }
-
-    ei_impulse_result_t result = { 0 };
-    ei_printf("Example standalone - Ambiq Apollo 5");
 
     while (1) {
         // the features are stored into flash, and we don't want to load everything into RAM

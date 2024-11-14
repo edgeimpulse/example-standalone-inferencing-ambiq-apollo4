@@ -48,7 +48,7 @@ SECTIONS
         . = ALIGN(8);
     } > MCU_TCM
 
-    .heap : {
+    .heap (NOLOAD): {
         __heap_start__ = .;
         end = __heap_start__;
         _end = end;
@@ -82,12 +82,16 @@ SECTIONS
         _ebss = .;
     } > MCU_TCM
 
-    .shared :
+   .shared :
     {
         . = ALIGN(4);
         KEEP(*(.resource_table))
+        . = ALIGN(4);
+
+        _ssdata = .;
         KEEP(*(.shared))
         . = ALIGN(4);
+        _sedata = .;
     } > SHARED_SRAM AT>MCU_MRAM
-    .ARM.attributes 0 : { *(.ARM.attributes) }
+    _init_data_sram = LOADADDR(.shared);
 }

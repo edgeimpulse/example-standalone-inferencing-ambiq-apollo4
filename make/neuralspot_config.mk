@@ -13,7 +13,7 @@ NESTDIR := nest
 SHELL  :=/bin/bash
 
 ifndef PLATFORM
-PLATFORM := apollo4p_evb
+PLATFORM := apollo4p_blue_kxr_evb
 endif
 
 ##### Target Hardware Defaults #####
@@ -79,7 +79,7 @@ CMSIS_VERSION := CMSIS_5-5.9.0
 EXAMPLE     := all
 TARGET      := firmware-ambiq-apollo4
 NESTCOMP    := extern/AmbiqSuite
-NESTEGG := firmware-ambiq-apollo4
+NESTEGG := basic_tf_stub
 NESTSOURCEDIR := examples/$(NESTEGG)/src
 TARGETS := apollo4p_evb apollo4p_blue_kbr_evb apollo4p_blue_kxr_evb apollo4l_evb apollo4l_blue_evb
 
